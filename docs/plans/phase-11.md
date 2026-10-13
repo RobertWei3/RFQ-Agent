@@ -139,3 +139,8 @@ $ git status --porcelain
 | I7 | 公开方式 | 当前仓库（含全部历史）留在本地做私有存档；P11 合并后用 `git archive main` 的快照新建 GitHub 仓库 `RobertWei3/RFQ-Agent`，只有一个初始提交，以后在新仓库开发。不改写现有历史 |
 | I8 | 许可证 | MIT（`LICENSE`，版权人写 GitHub 用户名 `RobertWei3`）；`pyproject.toml` 加 `license`；两版 README 末尾加许可证一节 |
 | I9 | 公开仓库的提交者身份 | 新仓库本地配置用 GitHub 用户名与 noreply 邮箱（`110293175+RobertWei3@users.noreply.github.com`），不用个人邮箱 |
+
+## 开源后追加：spec 英文译本（用户同意按推荐，2026-10-13）
+| # | 问题 | 决定 |
+|---|---|---|
+| I10 | spec 要不要中英文 | 中文 `RFQ-SPEC.md` 保持唯一权威，新增英文译本 `RFQ-SPEC.en.md`：顶部互相链接，英文版开头注明以中文版为准；代码块中的注释翻译、代码原样保留（§18 的两个中文占位值保留并在块后说明）；末尾附中英术语对照表（取自 GLOSSARY.md）。spec §16 写明规则；CLAUDE.md 加同步要求（改 spec 时同一提交同步英文版）；测试 `test_the_english_spec_follows_the_chinese_spec` 检查章节编号、代码块数量与语言、python / yaml 代码块中注释以外的代码一致（改英文版一个配置值或删一个小节标题时失败，已验证）。顺带：spec 开头“按第 15 节的 Phase 顺序”改为第 17 节（原笔误）；§5 目录树补上 README.zh-CN.md、RFQ-SPEC.en.md、GLOSSARY.md、LICENSE、CLAUDE.md |

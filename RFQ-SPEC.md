@@ -1,7 +1,9 @@
 # RFQ-Agent 实施文档（给 Claude Code）
 
+中文 | [English](RFQ-SPEC.en.md)
+
 > 仓库目录：`RFQ-Agent/`
-> 本文档是唯一的需求来源。实施时按第 15 节的 Phase 顺序推进，**每完成一个 Phase 就停下**，汇报做了什么、测试结果、下一步计划，等我确认后再继续。
+> 本文档是唯一的需求来源。实施时按第 17 节的 Phase 顺序推进，**每完成一个 Phase 就停下**，汇报做了什么、测试结果、下一步计划，等我确认后再继续。
 
 ---
 
@@ -96,8 +98,13 @@ Excel 询价单
 
 ```
 RFQ-Agent/
-├── RFQ-SPEC.md
-├── README.md
+├── RFQ-SPEC.md                # 需求与业务规则（中文，唯一权威）
+├── RFQ-SPEC.en.md             # 英文译本，以中文版为准（§16）
+├── GLOSSARY.md                # 领域术语
+├── README.md                  # 英文
+├── README.zh-CN.md            # 中文
+├── LICENSE                    # MIT
+├── CLAUDE.md                  # 给 Claude Code 的工作流程
 ├── pyproject.toml
 ├── .env.example
 ├── config/
@@ -945,6 +952,7 @@ landed_cost   = FOB + freight + insurance + duty + mpf + brokerage + inland_frei
   - 快速开始（P11 确认）：`uv sync` → `uv run rfq data generate` → `RFQ_LLM_PROVIDER=fake uv run rfq run --input data/samples/rfq_sample_20.xlsx`，不需要 `.env`；三条命令放在 `<!-- quickstart:begin -->` / `<!-- quickstart:end -->` 之间，由测试在全新副本中执行验收（退出码、产物、跑完后工作区干净）。
   - 中英文分开（P11 review 后确认）：`README.md` 为英文版（GitHub 默认显示），`README.zh-CN.md` 为中文版，两版顶部互相链接、内容一致，快速开始命令由测试检查相同。简介不写作者个人背景，只写目前是学习与交流用的项目、后续计划发展为对接真实企业数据、有意合作可通过 GitHub Issue 联系。
   - 另有“更多用法”（评估、rescore 与策略对比、错误注入、复核、resume / rerun-failed、单个 agent、API、Dashboard、MCP）与“开发”两节。README 中的命令与输出都是 fake 模式实际跑过的；真实 provider 只演示不加 `--allow-real` 时被拦下。评估摘要只用 `docs/plans/` 已记录的真实数字。
+- `RFQ-SPEC.md`（中文，唯一权威）/ `RFQ-SPEC.en.md`（英文译本）：两份顶部互相链接，英文版开头注明以中文版为准。改 spec 时在同一个提交里同步英文版；测试检查两份的章节编号一致、代码块数量一致、代码块中注释以外的代码一致（英文版翻译代码块中的注释，代码原样保留）。英文版末尾附中英术语对照表（取自 GLOSSARY.md）。
 - `docs/design-notes.md`：**只生成模板，内容由我本人填写**，不要替我编造原系统的细节。模板章节：
   1. 原系统概述（平台版本）
   2. 为什么拆成四个 agent
