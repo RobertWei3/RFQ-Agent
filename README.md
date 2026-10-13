@@ -59,37 +59,38 @@ The last line, `row correct`, is a quick check of the fake results against the s
 ## Architecture
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TD
-    rfq[/"RFQ workbook (Excel)"/] --> intake["intake<br/>parsing and part-number normalization"]
+    rfq[/"RFQ workbook"/] --> intake["intake<br/>parse + normalize"]
     intake --> oe
-    subgraph batch["Batch graph: 100 rows per batch, batches in sequence"]
-        oe["oe_interchange<br/>customer part no. → OE no. and supersession chain"]
+    subgraph batch["Batch graph"]
+        oe["oe_interchange<br/>part no. → OE"]
         msrp["oe_msrp<br/>MSRP"]
-        retail["retail_price<br/>five retail sites"]
-        cost["should_cost<br/>should-cost and landed cost"]
+        retail["retail_price<br/>5 retail sites"]
+        cost["should_cost<br/>landed cost"]
         oe --> msrp
         oe --> retail
         oe --> cost
     end
-    tools["mock external tools<br/>OEM catalog, interchange, price pages, retail, spec pages"] -.-> batch
-    mcp["MCP server<br/>internal database (SQLite)"] -.-> batch
-    msrp --> store[("result database (SQLite)<br/>+ LangGraph checkpoints")]
+    tools["Mock web tools"] -.-> batch
+    mcp["MCP server<br/>internal DB"] -.-> batch
+    msrp --> store[("Result DB<br/>+ checkpoints")]
     retail --> store
     cost --> store
     store --> resolve
-    subgraph final["Finalize graph: whole table, after all batches"]
-        resolve["entity resolution (deterministic)<br/>one-to-many / many-to-one, one record per row"]
-        confidence["confidence<br/>score 0–100, green / yellow / red"]
+    subgraph final["Finalize graph"]
+        resolve["Entity resolution"]
+        confidence["Confidence<br/>green / yellow / red"]
         resolve --> confidence
     end
-    confidence --> sheet["saved to the result database<br/>pricing worksheet xlsx + JSONL"]
-    sheet --> review["human review (--review only)<br/>red rows of a finalized run"]
-    review -. "re-summarize after each decision" .-> resolve
-    store --> api["FastAPI"] --> dash["Streamlit dashboard"]
+    confidence --> sheet["Worksheet<br/>xlsx + JSONL"]
+    sheet --> review["Human review<br/>(--review)"]
+    review -. "re-summarize" .-> resolve
+    store --> api["FastAPI"] --> dash["Streamlit"]
 ```
 
 - Each of the four subagents is a standalone LangGraph subgraph with its own CLI subcommand and tests. The LLM only extracts facts from noisy page text; choosing numbers, building supersession chains, outlier detection, price selection and the cost formulas are deterministic code.
-- Within a batch, the batch graph fans out the three price / cost agents in parallel over the OE results, and a batch's results are written to the result database in one transaction. Checkpoints are per row and per agent, so after a killed process `--resume` only runs what was left.
+- The batch graph takes 100 rows per batch (configurable), one batch after another. Within a batch it fans out the three price / cost agents in parallel over the OE results, and a batch's results are written to the result database in one transaction. Checkpoints are per row and per agent, so after a killed process `--resume` only runs what was left.
 - Entity resolution and confidence run over the whole table in the finalize graph, because many-to-one groups sharing an OE number usually span batches. The worksheet can be downloaded once finalizing is done; runs started with `--review` then review the red rows of the finalized results, and each decision goes back to entity resolution to re-summarize.
 - Confidence has three switchable strategies (`evidence` / `evidence_plus_self` / `evidence_plus_judge`). The default is `evidence_plus_judge`; see [Evaluation results](#evaluation-results) for why.
 
