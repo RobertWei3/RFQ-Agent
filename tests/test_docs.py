@@ -46,3 +46,18 @@ def test_the_english_spec_follows_the_chinese_spec() -> None:
     assert [lang for lang, _ in english_blocks] == [lang for lang, _ in chinese_blocks]
     for (lang, zh), (_, en) in zip(chinese_blocks, english_blocks, strict=True):
         assert _code_without_comments(lang, en) == _code_without_comments(lang, zh)
+
+
+GLOSSARY_SECTION = re.compile(r"^## ", flags=re.MULTILINE)
+GLOSSARY_TERM = re.compile(r"^\*\*.+\*\*[:：]$", flags=re.MULTILINE)
+
+
+def _terms_per_section(text: str) -> list[int]:
+    return [len(GLOSSARY_TERM.findall(part)) for part in GLOSSARY_SECTION.split(text)[1:]]
+
+
+def test_the_english_glossary_has_every_term_of_the_chinese_glossary() -> None:
+    # The Chinese glossary is authoritative; the English one mirrors it section by section.
+    chinese = (PROJECT_ROOT / "GLOSSARY.md").read_text(encoding="utf-8")
+    english = (PROJECT_ROOT / "GLOSSARY.en.md").read_text(encoding="utf-8")
+    assert _terms_per_section(english) == _terms_per_section(chinese)

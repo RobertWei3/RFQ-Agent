@@ -12,7 +12,7 @@
 Each Phase runs in its own fresh session; a separate review session does acceptance. A new session knows only what is in the repo, so every decision lives in a file:
 
 - Business rules -> RFQ-SPEC.md (edit the relevant section once the user decides), mirrored in RFQ-SPEC.en.md.
-- Domain terms -> GLOSSARY.md.
+- Domain terms -> GLOSSARY.md, mirrored in GLOSSARY.en.md in the same commit (`tests/test_docs.py` checks every term has an English entry).
 - Per-Phase design decisions -> `docs/plans/phase-N.md` (decision table, as in phase-2.md).
 
 ### Implementation session

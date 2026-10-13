@@ -333,7 +333,7 @@ uv run mypy --ignore-missing-imports dashboard
 | 路径 | 内容 |
 |---|---|
 | [RFQ-SPEC.md](RFQ-SPEC.md) / [RFQ-SPEC.en.md](RFQ-SPEC.en.md) | 需求与业务规则（中文版唯一权威；英文译本附中英术语对照表） |
-| [GLOSSARY.md](GLOSSARY.md) | 领域术语 |
+| [GLOSSARY.md](GLOSSARY.md) / [GLOSSARY.en.md](GLOSSARY.en.md) | 领域术语（中文版唯一权威；英文译本） |
 | [docs/plans/](docs/plans/) | 每个 Phase 的决策记录、审查修复与真实 LLM 实验结果 |
 | [docs/design-notes.md](docs/design-notes.md) | 设计说明（模板，待填写） |
 | `config/` | `settings.yaml`、`cost_model.yaml` |
