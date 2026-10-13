@@ -102,7 +102,8 @@ Excel RFQ
 RFQ-Agent/
 ├── RFQ-SPEC.md                # requirements and business rules (Chinese, the only authoritative version)
 ├── RFQ-SPEC.en.md             # English translation; the Chinese version wins (§16)
-├── GLOSSARY.md                # domain terms
+├── GLOSSARY.md                # domain terms (Chinese, the only authoritative version)
+├── GLOSSARY.en.md             # English translation; the Chinese version wins (§16)
 ├── README.md                  # English
 ├── README.zh-CN.md            # Chinese
 ├── LICENSE                    # MIT
@@ -955,6 +956,7 @@ Details (confirmed in P9):
   - Separate English and Chinese versions (confirmed after the P11 review): `README.md` is English (shown by GitHub by default), `README.zh-CN.md` is Chinese; the two link to each other at the top with the same content, and a test checks that their quick-start commands are identical. The overview does not include the author's personal background; it only says the project is currently for learning and exchange, plans to grow into a version working with real enterprise data, and that anyone interested in collaborating can reach out through a GitHub issue.
   - There are also "More usage" (evaluation, rescore and strategy comparison, error injection, review, resume / rerun-failed, single agent, API, Dashboard, MCP) and "Development" sections. Every command and output in the README was actually run in fake mode; for real providers it only shows the refusal without `--allow-real`. The evaluation summary uses only real numbers recorded in `docs/plans/`.
 - `RFQ-SPEC.md` (Chinese, the only authoritative version) / `RFQ-SPEC.en.md` (English translation): the two link to each other at the top, and the English version states at the start that the Chinese version wins. When the spec changes, the English version is updated in the same commit; a test checks that both have the same section numbers, the same number of code blocks, and the same code apart from comments inside code blocks (the English version translates comments in code blocks and keeps the code as is). The English version ends with a Chinese–English term table (taken from GLOSSARY.md).
+- `GLOSSARY.md` (Chinese, the only authoritative version) / `GLOSSARY.en.md` (English translation): likewise linked to each other, the Chinese version wins, and both change in the same commit; each entry is headed "English term (Chinese original)", and the _Avoid_ lines keep the Chinese wordings with an English gloss; a test checks that every section has the same number of terms.
 - `docs/design-notes.md`: **generate only the template; the content is written by me**; do not invent details of the original system. Template sections:
   1. 原系统概述（平台版本） (Overview of the original system, platform version)
   2. 为什么拆成四个 agent (Why four agents)
@@ -1089,7 +1091,7 @@ categories:
 
 ## Appendix: Chinese–English terms
 
-Terms as defined in [GLOSSARY.md](GLOSSARY.md) (Chinese), for reading the code, the Chinese spec and `docs/plans/`.
+Terms as defined in [GLOSSARY.md](GLOSSARY.md) (Chinese; full English definitions in [GLOSSARY.en.md](GLOSSARY.en.md)), for reading the code, the Chinese spec and `docs/plans/`.
 
 | Chinese | English | Meaning in one line |
 |---|---|---|

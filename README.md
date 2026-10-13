@@ -12,7 +12,7 @@ This is currently a **project for learning and exchange**. It focuses on design 
 
 Tech stack: Python 3.11+, uv, LangGraph, LangChain chat models (DeepSeek by default; Anthropic, Qwen and a FakeLLM for tests are also supported), the official `mcp` SDK with `langchain-mcp-adapters`, Pydantic v2, SQLite, FastAPI, Streamlit, openpyxl, pytest.
 
-The detailed spec is written in Chinese ([RFQ-SPEC.md](RFQ-SPEC.md), authoritative) with an English translation ([RFQ-SPEC.en.md](RFQ-SPEC.en.md), which ends with a Chinese–English term table). The glossary ([GLOSSARY.md](GLOSSARY.md)) and per-phase decision records ([docs/plans/](docs/plans/)) are in Chinese.
+The detailed spec is written in Chinese ([RFQ-SPEC.md](RFQ-SPEC.md), authoritative) with an English translation ([RFQ-SPEC.en.md](RFQ-SPEC.en.md), which ends with a Chinese–English term table). The glossary is in Chinese ([GLOSSARY.md](GLOSSARY.md)) with an English translation ([GLOSSARY.en.md](GLOSSARY.en.md)); the per-phase decision records ([docs/plans/](docs/plans/)) are in Chinese.
 
 ## Quick start
 
@@ -333,7 +333,7 @@ uv run mypy --ignore-missing-imports dashboard
 | Path | Contents |
 |---|---|
 | [RFQ-SPEC.md](RFQ-SPEC.md) / [RFQ-SPEC.en.md](RFQ-SPEC.en.md) | Requirements and business rules (the Chinese version is authoritative; English translation with a term table) |
-| [GLOSSARY.md](GLOSSARY.md) | Domain terms (in Chinese) |
+| [GLOSSARY.md](GLOSSARY.md) / [GLOSSARY.en.md](GLOSSARY.en.md) | Domain terms (the Chinese version is authoritative; English translation) |
 | [docs/plans/](docs/plans/) | Per-phase decisions, review fixes and real-LLM experiment results (in Chinese) |
 | [docs/design-notes.md](docs/design-notes.md) | Design notes (template, to be filled in) |
 | `config/` | `settings.yaml`, `cost_model.yaml` |

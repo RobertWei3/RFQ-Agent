@@ -144,3 +144,4 @@ $ git status --porcelain
 | # | 问题 | 决定 |
 |---|---|---|
 | I10 | spec 要不要中英文 | 中文 `RFQ-SPEC.md` 保持唯一权威，新增英文译本 `RFQ-SPEC.en.md`：顶部互相链接，英文版开头注明以中文版为准；代码块中的注释翻译、代码原样保留（§18 的两个中文占位值保留并在块后说明）；末尾附中英术语对照表（取自 GLOSSARY.md）。spec §16 写明规则；CLAUDE.md 加同步要求（改 spec 时同一提交同步英文版）；测试 `test_the_english_spec_follows_the_chinese_spec` 检查章节编号、代码块数量与语言、python / yaml 代码块中注释以外的代码一致（改英文版一个配置值或删一个小节标题时失败，已验证）。顺带：spec 开头“按第 15 节的 Phase 顺序”改为第 17 节（原笔误）；§5 目录树补上 README.zh-CN.md、RFQ-SPEC.en.md、GLOSSARY.md、LICENSE、CLAUDE.md |
+| I11 | GLOSSARY 要不要中英文 | 同 I10：中文 `GLOSSARY.md` 唯一权威，新增 `GLOSSARY.en.md`，顶部互相链接；词条标题为“英文术语（中文原词）”，_Avoid_ 行保留中文原词并附英文释义；CLAUDE.md 加同步要求；spec §5、§16（中英两份）记录；测试 `test_the_english_glossary_has_every_term_of_the_chinese_glossary` 检查各节词条数一致（删掉英文版一个词条时失败，已验证） |
