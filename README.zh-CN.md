@@ -57,37 +57,38 @@ row correct 20/20 (by band: green 11/11, yellow 5/5, red 4/4)
 ## 架构
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TD
-    rfq[/"询价单 Excel"/] --> intake["intake<br/>解析与件号标准化"]
+    rfq[/"询价单 Excel"/] --> intake["intake<br/>解析与标准化"]
     intake --> oe
-    subgraph batch["批图：每批 100 行，批之间顺序执行"]
-        oe["oe_interchange<br/>客户件号 → OE 号与替代链"]
+    subgraph batch["批图"]
+        oe["oe_interchange<br/>客户件号 → OE"]
         msrp["oe_msrp<br/>MSRP"]
         retail["retail_price<br/>5 个零售站点"]
-        cost["should_cost<br/>应有成本与到岸成本"]
+        cost["should_cost<br/>应有成本"]
         oe --> msrp
         oe --> retail
         oe --> cost
     end
-    tools["mock 外部工具<br/>OEM 目录、互换、价格页、零售、规格页"] -.-> batch
-    mcp["MCP server<br/>内部库（SQLite）"] -.-> batch
-    msrp --> store[("结果库 SQLite<br/>+ LangGraph 检查点")]
+    tools["mock 外部工具"] -.-> batch
+    mcp["MCP server<br/>内部库"] -.-> batch
+    msrp --> store[("结果库<br/>+ 检查点")]
     retail --> store
     cost --> store
     store --> resolve
-    subgraph final["收尾图：全部批完成后对全表"]
-        resolve["实体消解（确定性）<br/>一对多 / 多对一，每行一条"]
-        confidence["置信度<br/>0–100 分，绿 / 黄 / 红"]
+    subgraph final["收尾图"]
+        resolve["实体消解"]
+        confidence["置信度<br/>绿 / 黄 / 红"]
         resolve --> confidence
     end
-    confidence --> sheet["写入结果库<br/>定价工作表 xlsx + JSONL"]
-    sheet --> review["人工复核（仅 --review）<br/>在已收尾的运行上复核红档行"]
-    review -. "每条决定后重新汇总" .-> resolve
-    store --> api["FastAPI"] --> dash["Streamlit Dashboard"]
+    confidence --> sheet["定价工作表<br/>xlsx + JSONL"]
+    sheet --> review["人工复核<br/>（--review）"]
+    review -. "重新汇总" .-> resolve
+    store --> api["FastAPI"] --> dash["Streamlit"]
 ```
 
 - 四个 subagent 各自是独立的 LangGraph 子图，有单独的 CLI 子命令和测试；LLM 只负责从带噪声的页面文本中抽取事实，选号、替代链、离群检测、选价、成本公式都由确定性代码完成。
-- 批图在每批内对 OE 解析结果并行 fan-out 三个价格 / 成本 agent，一批的结果在一个事务里写入结果库；检查点粒度是“一行一个 agent”，进程被杀后 `--resume` 只补跑没完成的部分。
+- 批图每批 100 行（可配置），批之间顺序执行；每批内对 OE 解析结果并行 fan-out 三个价格 / 成本 agent，一批的结果在一个事务里写入结果库；检查点粒度是“一行一个 agent”，进程被杀后 `--resume` 只补跑没完成的部分。
 - 实体消解和置信度放在收尾图里对全表做，因为多对一的共用 OE 组通常跨批。收尾完成后工作表即可下载；开了 `--review` 的运行再在已收尾的结果上复核红档行，每条决定后回到实体消解重新汇总。
 - 置信度有三种可切换的策略（`evidence` / `evidence_plus_self` / `evidence_plus_judge`），默认 `evidence_plus_judge`，选择依据见[评估结果](#评估结果)。
 
