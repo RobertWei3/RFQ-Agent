@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 - The single source of truth for this project is RFQ-SPEC.md. Read it before starting any work.
+- RFQ-SPEC.en.md is its English translation (the Chinese file wins). Whenever RFQ-SPEC.md changes, update RFQ-SPEC.en.md in the same commit; `tests/test_docs.py` checks that their structure matches.
 - Strictly follow the working rules in Section 0 of RFQ-SPEC.md.
 - All code comments and docstrings must be in English.
 - Use fake LLM mode for tests. Ask before running anything that calls a real LLM API.
@@ -10,7 +11,7 @@
 
 Each Phase runs in its own fresh session; a separate review session does acceptance. A new session knows only what is in the repo, so every decision lives in a file:
 
-- Business rules -> RFQ-SPEC.md (edit the relevant section once the user decides).
+- Business rules -> RFQ-SPEC.md (edit the relevant section once the user decides), mirrored in RFQ-SPEC.en.md.
 - Domain terms -> GLOSSARY.md.
 - Per-Phase design decisions -> `docs/plans/phase-N.md` (decision table, as in phase-2.md).
 

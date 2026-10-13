@@ -92,7 +92,7 @@ flowchart TD
 - 实体消解和置信度放在收尾图里对全表做，因为多对一的共用 OE 组通常跨批。收尾完成后工作表即可下载；开了 `--review` 的运行再在已收尾的结果上复核红档行，每条决定后回到实体消解重新汇总。
 - 置信度有三种可切换的策略（`evidence` / `evidence_plus_self` / `evidence_plus_judge`），默认 `evidence_plus_judge`，选择依据见[评估结果](#评估结果)。
 
-详细的阶段契约和业务规则见 [RFQ-SPEC.md](RFQ-SPEC.md)。
+详细的阶段契约和业务规则见 [RFQ-SPEC.md](RFQ-SPEC.md)（英文译本 [RFQ-SPEC.en.md](RFQ-SPEC.en.md)）。
 
 ## 配置
 
@@ -332,7 +332,7 @@ uv run mypy --ignore-missing-imports dashboard
 
 | 路径 | 内容 |
 |---|---|
-| [RFQ-SPEC.md](RFQ-SPEC.md) | 需求与业务规则（唯一来源） |
+| [RFQ-SPEC.md](RFQ-SPEC.md) / [RFQ-SPEC.en.md](RFQ-SPEC.en.md) | 需求与业务规则（中文版唯一权威；英文译本附中英术语对照表） |
 | [GLOSSARY.md](GLOSSARY.md) | 领域术语 |
 | [docs/plans/](docs/plans/) | 每个 Phase 的决策记录、审查修复与真实 LLM 实验结果 |
 | [docs/design-notes.md](docs/design-notes.md) | 设计说明（模板，待填写） |
