@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Secrets
+.env
+
+# Generated data and local databases
+data/generated/
+data/*.db
+data/*.db-*
+reports/
+data/runs/
+data/uploads/
+
+# OS
+.DS_Store
+
+# Office lock files
+~$*

@@ -1,0 +1,26 @@
+# 所有费率均为示意值，不代表任何真实关税或报价
+# All rates are illustrative only and do not represent any real tariff or quote.
+# The synthetic ground truth (rfq data generate) is computed with these same values.
+scrap_rate: 0.05
+labor_rate_per_hr: 9.0
+machine_rate_per_hr: 21.0
+overhead_rate: 1.0
+sga_rate: 0.10
+profit_rate: 0.10
+insurance_rate: 0.005
+mfn_duty_rate: 0.025
+additional_tariff_rate: 0.25
+mpf_rate: 0.003464
+brokerage_per_entry: 175.0
+units_per_shipment: 2000
+categories:
+  thermostat:
+    cycle_time_min: 5.0
+    packaging: 0.40
+    freight_per_unit: 0.35
+    inland_freight_per_unit: 0.15
+  water_pump:
+    cycle_time_min: 25.0
+    packaging: 1.20
+    freight_per_unit: 1.80
+    inland_freight_per_unit: 0.60

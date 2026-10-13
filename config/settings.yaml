@@ -1,0 +1,91 @@
+llm:
+  # Default model config; every role inherits these unless overridden under `roles`.
+  provider: deepseek            # deepseek | anthropic | qwen | fake
+  base_url: null                # null -> use providers.<provider>.base_url
+  model: deepseek-flash
+  temperature: 0
+  thinking: false               # DeepSeek only: sent as extra_body {"thinking": {"type": ...}}
+  timeout_s: 60
+  http_max_retries: 2
+  max_concurrency: 8
+  # USD per million tokens, keyed by model ID. Conservative: peak-hour, cache-miss prices
+  # (DeepSeek pricing page, checked 2026-10-03). Models without an entry are tracked with cost=NULL.
+  pricing_per_million:
+    deepseek-flash:
+      input: 0.30
+      output: 1.20
+    deepseek-v4-pro:
+      input: 1.32
+      output: 3.96
+  roles:
+    judge:
+      provider: deepseek
+      model: deepseek-v4-pro
+    self_eval:                  # evidence_plus_self samples (spec 12.2); main model, sampled
+      temperature: 0.7
+  providers:
+    deepseek:
+      base_url: https://api.deepseek.com
+      api_key_env: DEEPSEEK_API_KEY
+    anthropic:
+      base_url: null
+      api_key_env: ANTHROPIC_API_KEY
+      default_model: claude-sonnet-5-5
+    qwen:
+      base_url: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+      api_key_env: DASHSCOPE_API_KEY
+      default_model: qwen-plus
+    fake:
+      base_url: null
+      api_key_env: null
+      default_model: fake
+
+pipeline:
+  batch_size: 100
+  structured_output_retries: 2
+  retail_outlier_threshold: 0.40
+  spec_weight_tolerance: 0.05   # should_cost: internal vs external weight agreement (relative)
+
+confidence:
+  strategy: evidence_plus_judge # evidence | evidence_plus_self | evidence_plus_judge (P10 injection experiment)
+  bands:
+    green_min: 80
+    yellow_min: 50
+  self_samples: 2
+  self_weight: 0.3              # share of the LLM self-assessment signal in the final score
+  judge_band: [50, 100]         # judge also reviews green rows; it can only lower a score
+  judge_weight: 0.5             # share of the judge score in the final score
+  evidence:                     # deterministic signals (spec 12.2); tuned in P10
+    weights:
+      oe_match: 0.25
+      chain: 0.10
+      price_sources: 0.20
+      retail_dispersion: 0.15
+      msrp_retail: 0.10
+      spec_source: 0.20
+    oe_match: {exact: 1.0, normalized: 0.9, interchange: 0.7, llm_inferred: 0.2, manual: 1.0}
+    spec_source: {both_agree: 1.0, internal: 0.8, external: 0.5, conflict: 0.3, missing: 0.0}
+    chain_truncated: 0.3
+    msrp_retail_suspicious_ratio: 1.2   # selected retail / MSRP above this scores `above`
+    price_sources_full: 4
+    msrp_retail: {at_most_msrp: 1.0, up_to_suspicious: 0.5, above: 0.0, missing: 0.5}
+    single_quote_dispersion: 0.5
+
+storage:
+  db_path: data/rfq.db          # relative paths resolve against the project root
+  checkpoint_path: data/checkpoints.db   # LangGraph checkpoints, separate from the business DB
+  upload_dir: data/uploads      # RFQ workbooks uploaded through the API
+  lease_ttl_s: 60               # a run lease expires after this many seconds without heartbeat
+  lease_heartbeat_s: 10         # how often the process driving a run refreshes its lease
+
+data:
+  dataset_dir: data/generated/n200_s42   # written by `rfq data generate`
+
+tools:
+  top_k: 5                      # max hits per search
+  max_decoys: 2                 # near-miss pages mixed into results as noise
+  faults:                       # deterministic fault injection for resilience tests
+    enabled: false
+    timeout_rate: 0.0
+    empty_rate: 0.0
+    seed: 0
