@@ -61,7 +61,7 @@ The last line, `row correct`, is a quick check of the fake results against the s
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TD
-    rfq[/"RFQ workbook"/] --> intake["intake<br/>parse + normalize"]
+    rfq[/"RFQ workbook"/] --> intake["intake<br/>normalize"]
     intake --> oe
     subgraph batch["Batch graph"]
         oe["oe_interchange<br/>part no. → OE"]
@@ -79,8 +79,8 @@ flowchart TD
     cost --> store
     store --> resolve
     subgraph final["Finalize graph"]
-        resolve["Entity resolution"]
-        confidence["Confidence<br/>green / yellow / red"]
+        resolve["Entity<br/>resolution"]
+        confidence["Confidence<br/>score + band"]
         resolve --> confidence
     end
     confidence --> sheet["Worksheet<br/>xlsx + JSONL"]
